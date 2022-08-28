@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	JPI "github.com/cal1co/jpi/api"
+	Server "github.com/cal1co/jpi/server"
 )
 
 const (
@@ -21,5 +21,5 @@ func main() {
 	// fmt.Println(len(byteValue))
 	defer file.Close()
 
-	JPI.JPI()
+	Server.JPI()
 }

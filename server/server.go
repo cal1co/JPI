@@ -1,4 +1,4 @@
-package JPI
+package Server
 
 import (
 	"net/http"
