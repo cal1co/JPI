@@ -21,6 +21,5 @@ func JPI() {
 			"results": word,
 		})
 	})
-
 	server.Run()
 }
