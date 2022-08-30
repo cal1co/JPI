@@ -5,13 +5,31 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-
-	"github.com/twuillemin/levenshteinsearch/pkg/levenshteinsearch"
+	"strconv"
 	// Server "github.com/cal1co/jpi/server"
 )
 
 const (
-	terms = "dictdata/jmdict_english/term_bank_1.json"
+	terms   = "dictdata/jmdict_english/term_bank_1.json"
+	terms2  = "dictdata/jmdict_english/term_bank_2.json"
+	terms3  = "dictdata/jmdict_english/term_bank_3.json"
+	terms4  = "dictdata/jmdict_english/term_bank_4.json"
+	terms5  = "dictdata/jmdict_english/term_bank_5.json"
+	terms6  = "dictdata/jmdict_english/term_bank_6.json"
+	terms7  = "dictdata/jmdict_english/term_bank_7.json"
+	terms8  = "dictdata/jmdict_english/term_bank_8.json"
+	terms9  = "dictdata/jmdict_english/term_bank_9.json"
+	terms10 = "dictdata/jmdict_english/term_bank_10.json"
+	terms11 = "dictdata/jmdict_english/term_bank_11.json"
+	terms12 = "dictdata/jmdict_english/term_bank_12.json"
+	terms13 = "dictdata/jmdict_english/term_bank_13.json"
+	terms14 = "dictdata/jmdict_english/term_bank_14.json"
+	terms15 = "dictdata/jmdict_english/term_bank_15.json"
+	terms16 = "dictdata/jmdict_english/term_bank_16.json"
+	terms17 = "dictdata/jmdict_english/term_bank_17.json"
+	terms18 = "dictdata/jmdict_english/term_bank_18.json"
+	terms19 = "dictdata/jmdict_english/term_bank_19.json"
+	terms20 = "dictdata/jmdict_english/term_bank_20.json"
 )
 
 type Entry struct {
@@ -19,8 +37,8 @@ type Entry struct {
 	Alternate string
 	Form      string
 	Blank     string
-	Id        string
-	Def       string
+	Id        int
+	Def       []interface{}
 	SecondId  string
 	Source    string
 }
@@ -30,7 +48,7 @@ type Entries struct {
 
 func main() {
 
-	dict := levenshteinsearch.CreateDictionary()
+	// dict := levenshteinsearch.CreateDictionary()
 
 	jsonFile, err := os.Open(terms)
 	if err != nil {
@@ -42,40 +60,6 @@ func main() {
 	if err := json.Unmarshal(byteValue, &entries); err != nil {
 		panic(err)
 	}
-
-	// fmt.Println(entries[5010][5])
-	// val := fmt.Sprint(entries[5010][5])
-	// fmt.Println(val)
-	// dict.Put(val)
-	// dict.Put("interview")
-	// fmt.Println(dict.WordCount)
-	// dict.Put("interviewer")
-
-	// dictMap := make(map[string]map)
-	// for i := 0; i < len(entries); i++ {
-	// 	dictMap[entries[i][0]] = {
-
-	// 	}
-	// }
-
-	// for i := 0; i < len(entries); i++ {
-	// 	dict.Put(fmt.Sprint("%i:", entries[i][5]))
-	// }
-
-	// var s []map[string]map[string]string
-	// for i := 0; i < len(entries); i++ {
-	// 	key := fmt.Sprint(entries[i][0])
-	// 	def := fmt.Sprint(entries[i][5])
-	// 	reading := fmt.Sprint(entries[i][1])
-
-	// 	resMap := make(map[string]map[string]string)
-	// 	resMap[key] = map[string]string{}
-	// 	resMap[key]["Reading"] = reading
-	// 	resMap[key]["Definition"] = def
-	// 	s = append(s, resMap)
-	// }
-	// fmt.Println(s[9999])
-
 	var slice []Entry
 	for i := 0; i < len(entries); i++ {
 		word := fmt.Sprint(entries[i][0])
@@ -83,27 +67,31 @@ func main() {
 		form := fmt.Sprint(entries[i][2])
 		blank := fmt.Sprint(entries[i][3])
 		id := fmt.Sprint(entries[i][4])
-		def := fmt.Sprint(entries[i][5])
-		secondid := fmt.Sprint(entries[i][6])
+		intId, err := strconv.Atoi(id)
+		if err != nil {
+			panic(err)
+		}
+		// def := fmt.Sprint(entries[i][5])
+		def, ok := entries[i][5].([]interface{})
+		if !ok {
+			panic(ok)
+		}
+		id2 := fmt.Sprint(entries[i][6])
 		source := fmt.Sprint(entries[i][7])
 		e := Entry{
 			Word:      word,
 			Alternate: alternate,
 			Form:      form,
 			Blank:     blank,
-			Id:        id,
+			Id:        intId,
 			Def:       def,
-			SecondId:  secondid,
+			SecondId:  id2,
 			Source:    source,
 		}
 		slice = append(slice, e)
-		dict.Put(def)
+		if slice[i].Word == "こんにちわ" {
+			fmt.Println(i)
+		}
 	}
-
-	fmt.Println(slice[9876].Def)
-
-	// jsonFile.Close()
-
-	fmt.Println(dict.SearchAll("[cold]", 1))
-	// Server.JPI()
+	fmt.Println(slice[1315].Def)
 }
