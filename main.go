@@ -92,19 +92,13 @@ func main() {
 			slice.data = append(slice.data, e)
 		}
 	}
-	// Server.JPI()
-	// fmt.Println(fmt.Sprint(slice.data[0].Def[0])[10])
-	// fmt.Println(algo.Blah())
-	// algo.Insert("hello", 0, trie)
 	start := time.Now()
-	results := algo.Find("pretty", trie, 0, 0, 0)
+	results := algo.Find("cat", trie, 1, 0, 0)
 	fmt.Println("res", results, " in ", time.Since(start))
+	fmt.Println("RESULTS")
 	for i := 0; i < len(results); i++ {
-		fmt.Println(results[i].Position)
 		for j := 0; j < len(results[i].Position); j++ {
 			fmt.Println(slice.data[results[i].Position[j]])
 		}
 	}
-
-	// fmt.Println(float64(1-2) / float64(5))
 }

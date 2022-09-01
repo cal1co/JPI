@@ -1,9 +1,5 @@
 package algo
 
-import (
-	"fmt"
-)
-
 const (
 	charSize = 26
 )
@@ -56,26 +52,30 @@ func Find(word string, node *trie, edits int, index int, changes int) []result {
 	var slice []result
 	var bfs func(word string, node *trieNode, edits int, index int, changes int) func(map[int]int)
 	bfs = func(word string, node *trieNode, edits int, index int, changes int) func(map[int]int) {
+		if index == len(word) && edits > 0 {
+			index = len(word) - 1
+		}
+		if edits < 0 {
+			return nil
+		}
 		if node.isEnd {
 			scr := float64((node.length - changes)) / float64(len(word))
 			if scr >= 0.6 && scr <= 1.0 {
-				fmt.Println(node.pos)
 				slice = append(slice, result{Position: node.pos, score: scr})
 			}
 		}
-		if index == len(word) || edits < 0 {
+		if index == len(word) {
 			return nil
 		}
 		idx := word[index] - 'a'
-		if node.children[idx] == nil {
-			edits -= 1
-			for i := 0; i < len(node.children); i++ {
-				if node.children[i] != nil {
-					bfs(word, node.children[i], edits, index+1, changes+1)
+		for i := 0; i < len(node.children); i++ {
+			if node.children[i] != nil {
+				if node.children[i] != node.children[idx] {
+					bfs(word, node.children[i], edits-1, index+1, changes+1)
+				} else {
+					bfs(word, node.children[idx], edits, index+1, changes)
 				}
 			}
-		} else {
-			bfs(word, node.children[idx], edits, index+1, changes)
 		}
 		return nil
 	}
