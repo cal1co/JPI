@@ -1,9 +1,12 @@
 package algo
 
-import "sort"
+import (
+	"fmt"
+	"sort"
+)
 
 const (
-	charSize = 26
+	charSize = 27
 )
 
 type trieNode struct {
@@ -30,6 +33,10 @@ func InitTrie() *Trie {
 
 func Insert(word string, index int, t *Trie) {
 	curr := t.Root
+	if word == "monkey (esp. the Japanese macaque, Macaca fuscata)" {
+		fmt.Println("MONKEY")
+		// fmt.Println(curr)
+	}
 	for i := 0; i < len(word); i++ {
 		if word[i] < 97 || word[i] > 123 {
 			return
@@ -40,11 +47,14 @@ func Insert(word string, index int, t *Trie) {
 		}
 		curr = curr.children[idx]
 	}
+	if word == "monkey (esp. the Japanese macaque, Macaca fuscata)" {
+		fmt.Println("MONKEY aft")
+	}
 	curr.isEnd = true
 	curr.pos = append(curr.pos, index)
-	sort.Slice(curr.pos, func(i, j int) bool {
-		return curr.pos[i] > curr.pos[j]
-	})
+	// sort.Slice(curr.pos, func(i, j int) bool {
+	// 	return curr.pos[i] > curr.pos[j]
+	// })
 	curr.length = len(word)
 }
 
@@ -67,6 +77,9 @@ func Find(word string, node *Trie, edits int, index int, changes int) []result {
 				scr = float64((len(word) - changes)) / float64(len(word))
 			}
 			if scr >= 0.6 && scr <= 1.0 {
+				sort.Slice(node.pos, func(i, j int) bool {
+					return node.pos[i] > node.pos[j]
+				})
 				slice = append(slice, result{Position: node.pos, Score: scr})
 			}
 		}

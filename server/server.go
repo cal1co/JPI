@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	data "github.com/cal1co/jpi/handleData"
@@ -20,8 +21,7 @@ func JPI(trieData data.Output) {
 	})
 
 	server.GET("/get/:word", func(c *gin.Context) {
-		word := c.Param("word")
-
+		word := strings.ToLower(c.Param("word"))
 		start := time.Now()
 		res := data.Fetch(&trieData.Nodes, trieData.Slice, word)
 		end := time.Since(start).Seconds()

@@ -7,6 +7,7 @@ import (
 	"os"
 	"sort"
 	"strconv"
+	"strings"
 
 	"github.com/cal1co/jpi/algo"
 )
@@ -29,7 +30,7 @@ type Output struct {
 }
 
 func Fetch(trie *algo.Trie, slice Entries, word string) []Entry {
-	res := algo.Find(word, trie, 3, 0, 0)
+	res := algo.Find(word, trie, 2, 0, 0)
 	sort.Slice(res, func(i, j int) bool {
 		return res[i].Score > res[j].Score
 	})
@@ -111,7 +112,10 @@ func InitStructures() Output {
 				Def:       def,
 			}
 			for j := 0; j < len(e.Def); j++ {
-				algo.Insert(fmt.Sprint(e.Def[j]), len(slice.data), trie)
+				definitions := strings.Split(strings.ToLower(fmt.Sprint(e.Def[j])), " ")
+				for k := 0; k < len(definitions); k++ {
+					algo.Insert(definitions[k], len(slice.data), trie)
+				}
 			}
 			slice.data = append(slice.data, e)
 		}
