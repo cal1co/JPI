@@ -6,9 +6,9 @@ import (
 	"io/ioutil"
 	"os"
 	"strconv"
-	"time"
 
 	"github.com/cal1co/jpi/algo"
+	Server "github.com/cal1co/jpi/server"
 )
 
 type Entry struct {
@@ -21,6 +21,19 @@ type Entry struct {
 
 type Entries struct {
 	data []Entry
+}
+type result struct {
+	Position []int
+	Score    float64
+}
+
+func FormatResults(results []result) {
+	var resSlice []Entry
+	for i := 0; i < len(results); i++ {
+		for j := 0; j < len(results[i].Position); j++ {
+			resSlice = append(resSlice, slice.data[results[i].Position[j]])
+		}
+	}
 }
 
 func main() {
@@ -92,13 +105,5 @@ func main() {
 			slice.data = append(slice.data, e)
 		}
 	}
-	start := time.Now()
-	results := algo.Find("cat", trie, 1, 0, 0)
-	fmt.Println("res", results, " in ", time.Since(start))
-	fmt.Println("RESULTS")
-	for i := 0; i < len(results); i++ {
-		for j := 0; j < len(results[i].Position); j++ {
-			fmt.Println(slice.data[results[i].Position[j]])
-		}
-	}
+	Server.JPI(trie)
 }

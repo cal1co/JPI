@@ -11,22 +11,22 @@ type trieNode struct {
 	length   int
 }
 
-type trie struct {
+type Trie struct {
 	Root *trieNode
 }
 
 type result struct {
 	Position []int
-	score    float64
+	Score    float64
 }
 
-func InitTrie() *trie {
-	return &trie{
+func InitTrie() *Trie {
+	return &Trie{
 		Root: &trieNode{},
 	}
 }
 
-func Insert(word string, index int, t *trie) {
+func Insert(word string, index int, t *Trie) {
 	// if word == "" {
 	// 	return
 	// }
@@ -47,21 +47,26 @@ func Insert(word string, index int, t *trie) {
 	curr.length = len(word)
 }
 
-func Find(word string, node *trie, edits int, index int, changes int) []result {
+func Find(word string, node *Trie, edits int, index int, changes int) []result {
 	// curr := t.Root
 	var slice []result
 	var bfs func(word string, node *trieNode, edits int, index int, changes int) func(map[int]int)
 	bfs = func(word string, node *trieNode, edits int, index int, changes int) func(map[int]int) {
 		if index == len(word) && edits > 0 {
 			index = len(word) - 1
+			// changes += 1
 		}
 		if edits < 0 {
 			return nil
 		}
 		if node.isEnd {
-			scr := float64((node.length - changes)) / float64(len(word))
+			var scr float64
+			scr = float64((node.length - changes)) / float64(len(word))
+			if node.length > len(word) {
+				scr = float64((len(word) - changes)) / float64(len(word))
+			}
 			if scr >= 0.6 && scr <= 1.0 {
-				slice = append(slice, result{Position: node.pos, score: scr})
+				slice = append(slice, result{Position: node.pos, Score: scr})
 			}
 		}
 		if index == len(word) {
