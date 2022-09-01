@@ -27,13 +27,9 @@ func InitTrie() *Trie {
 }
 
 func Insert(word string, index int, t *Trie) {
-	// if word == "" {
-	// 	return
-	// }
 	curr := t.Root
 	for i := 0; i < len(word); i++ {
 		if word[i] < 97 || word[i] > 123 {
-			// break
 			return
 		}
 		idx := word[i] - 'a'
@@ -48,13 +44,13 @@ func Insert(word string, index int, t *Trie) {
 }
 
 func Find(word string, node *Trie, edits int, index int, changes int) []result {
-	// curr := t.Root
 	var slice []result
+
 	var bfs func(word string, node *trieNode, edits int, index int, changes int) func(map[int]int)
+
 	bfs = func(word string, node *trieNode, edits int, index int, changes int) func(map[int]int) {
 		if index == len(word) && edits > 0 {
 			index = len(word) - 1
-			// changes += 1
 		}
 		if edits < 0 {
 			return nil
@@ -72,6 +68,7 @@ func Find(word string, node *Trie, edits int, index int, changes int) []result {
 		if index == len(word) {
 			return nil
 		}
+
 		idx := word[index] - 'a'
 		for i := 0; i < len(node.children); i++ {
 			if node.children[i] != nil {
@@ -85,25 +82,6 @@ func Find(word string, node *Trie, edits int, index int, changes int) []result {
 		return nil
 	}
 	bfs(word, node.Root, edits, 0, 0)
+
 	return slice
 }
-
-// func Blah() [][]map[int]float64 {
-// 	start := time.Now()
-// 	var arr [][]map[int]float64
-// 	trie := InitTrie()
-// 	words := []string{"ape", "app", "apple", "add", "aud"}
-// 	for i := 0; i < len(words); i++ {
-// 		trie.insert(words[i], i)
-// 	}
-// 	// match := []string{"ape", "app", "aid", "aud", "aplle"}
-// 	match := []string{"app", "ape", "apple", "add", "aplle", "aud", "aid"}
-// 	for i := 0; i < len(words); i++ {
-// 		matched := trie.find(match[i], trie.root, 2, 0, 0)
-// 		if len(matched) > 0 {
-// 			arr = append(arr, matched)
-// 		}
-// 	}
-// 	fmt.Println(time.Since(start))
-// 	return arr
-// }

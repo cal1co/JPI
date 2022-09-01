@@ -3,13 +3,14 @@ package Server
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 
-	"github.com/cal1co/jpi/algo"
+	data "github.com/cal1co/jpi/handleData"
 	"github.com/gin-gonic/gin"
 )
 
-func JPI(trie *algo.Trie) {
+func JPI(trieData data.Output) {
 	server := gin.Default()
 
 	server.GET("/", func(c *gin.Context) {
@@ -21,11 +22,11 @@ func JPI(trie *algo.Trie) {
 	server.GET("/get/:word", func(c *gin.Context) {
 		word := c.Param("word")
 		start := time.Now()
-		output := algo.Find(word, trie, 3, 0, 0)
+		res := data.Fetch(&trieData.Nodes, trieData.Slice, word)
 		end := time.Since(start).Seconds()
-		msg := "results in " + fmt.Sprintf("%f", end) + "s"
+		msg := strconv.Itoa(len(res)) + " results for " + "'" + word + "'" + " in " + fmt.Sprintf("%f", end) + "s"
 		c.JSON(http.StatusOK, gin.H{
-			msg: output,
+			msg: res,
 		})
 	})
 	server.Run()
