@@ -1,5 +1,7 @@
 package algo
 
+import "sort"
+
 const (
 	charSize = 26
 )
@@ -40,6 +42,9 @@ func Insert(word string, index int, t *Trie) {
 	}
 	curr.isEnd = true
 	curr.pos = append(curr.pos, index)
+	sort.Slice(curr.pos, func(i, j int) bool {
+		return curr.pos[i] > curr.pos[j]
+	})
 	curr.length = len(word)
 }
 

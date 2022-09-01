@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"sort"
 	"strconv"
 
 	"github.com/cal1co/jpi/algo"
@@ -13,7 +14,7 @@ import (
 type Entry struct {
 	Word      string
 	Alternate string
-	Id        int
+	Freq      int
 	Def       []interface{}
 	Dist      float32
 }
@@ -28,12 +29,16 @@ type Output struct {
 }
 
 func Fetch(trie *algo.Trie, slice Entries, word string) []Entry {
-	res := algo.Find(word, trie, 1, 0, 0)
+	res := algo.Find(word, trie, 3, 0, 0)
+	sort.Slice(res, func(i, j int) bool {
+		return res[i].Score > res[j].Score
+	})
 	var returnData []Entry
 	for i := 0; i < len(res); i++ {
-		fmt.Println(len(res[i].Position))
-		fmt.Println(res[i].Position)
-		for j := 0; j < len(res[i].Position)-1; j++ {
+		sort.Slice(res[i].Position, func(k, l int) bool {
+			return slice.data[res[i].Position[k]].Freq > slice.data[res[i].Position[l]].Freq
+		})
+		for j := 0; j < len(res[i].Position); j++ {
 			returnData = append(returnData, slice.data[res[i].Position[j]])
 		}
 	}
@@ -102,7 +107,7 @@ func InitStructures() Output {
 			e := Entry{
 				Word:      word,
 				Alternate: alternate,
-				Id:        intId,
+				Freq:      intId,
 				Def:       def,
 			}
 			for j := 0; j < len(e.Def); j++ {

@@ -21,10 +21,13 @@ func JPI(trieData data.Output) {
 
 	server.GET("/get/:word", func(c *gin.Context) {
 		word := c.Param("word")
+
 		start := time.Now()
 		res := data.Fetch(&trieData.Nodes, trieData.Slice, word)
 		end := time.Since(start).Seconds()
+
 		msg := strconv.Itoa(len(res)) + " results for " + "'" + word + "'" + " in " + fmt.Sprintf("%f", end) + "s"
+
 		c.JSON(http.StatusOK, gin.H{
 			msg: res,
 		})
