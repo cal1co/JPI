@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	data "github.com/cal1co/jpi/handleData"
+	data "github.com/cal1co/jpi/controllers"
 	"github.com/gin-gonic/gin"
 )
 
