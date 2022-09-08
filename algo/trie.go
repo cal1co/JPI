@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	charSize = 27
+	charSize = 26
 )
 
 type trieNode struct {

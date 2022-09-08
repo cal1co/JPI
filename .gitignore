@@ -11,3 +11,5 @@ dictdata
 *.out
 
 go.work
+# Local Netlify folder
+.netlify
