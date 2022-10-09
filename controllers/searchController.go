@@ -113,8 +113,11 @@ func InitStructures() Output {
 			}
 			for j := 0; j < len(e.Def); j++ {
 				definitions := strings.Split(strings.ToLower(fmt.Sprint(e.Def[j])), " ")
-				for k := 0; k < len(definitions); k++ {
-					algo.Insert(definitions[k], len(slice.data), trie)
+				algo.Insert(strings.ToLower(fmt.Sprint(e.Def[j])), len(slice.data), trie)
+				if len(definitions) > 1 {
+					for k := 0; k < len(definitions); k++ {
+						algo.Insert(definitions[k], len(slice.data), trie)
+					}
 				}
 			}
 			slice.data = append(slice.data, e)

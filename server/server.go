@@ -12,15 +12,15 @@ import (
 )
 
 func JPI(trieData data.Output) {
-	server := gin.Default()
+	router := gin.Default()
 
-	server.GET("/", func(c *gin.Context) {
+	router.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "OK",
 		})
 	})
 
-	server.GET("/get/:word", func(c *gin.Context) {
+	router.GET("/get/:word", func(c *gin.Context) {
 		word := strings.ToLower(c.Param("word"))
 		start := time.Now()
 		res := data.Fetch(&trieData.Nodes, trieData.Slice, word)
@@ -32,5 +32,5 @@ func JPI(trieData data.Output) {
 			msg: res,
 		})
 	})
-	server.Run()
+	router.Run()
 }

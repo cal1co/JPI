@@ -1,12 +1,11 @@
 package algo
 
 import (
-	"fmt"
 	"sort"
 )
 
 const (
-	charSize = 26
+	charSize = 27
 )
 
 type trieNode struct {
@@ -33,28 +32,26 @@ func InitTrie() *Trie {
 
 func Insert(word string, index int, t *Trie) {
 	curr := t.Root
-	if word == "monkey (esp. the Japanese macaque, Macaca fuscata)" {
-		fmt.Println("MONKEY")
-		// fmt.Println(curr)
-	}
 	for i := 0; i < len(word); i++ {
 		if word[i] < 97 || word[i] > 123 {
-			return
+			if word[i] != 32 {
+				return
+			}
 		}
-		idx := word[i] - 'a'
+		var idx byte
+		if word[i] == 32 {
+			idx = 26
+		} else {
+			idx = word[i] - 'a'
+		}
+
 		if curr.children[idx] == nil {
 			curr.children[idx] = &trieNode{}
 		}
 		curr = curr.children[idx]
 	}
-	if word == "monkey (esp. the Japanese macaque, Macaca fuscata)" {
-		fmt.Println("MONKEY aft")
-	}
 	curr.isEnd = true
 	curr.pos = append(curr.pos, index)
-	// sort.Slice(curr.pos, func(i, j int) bool {
-	// 	return curr.pos[i] > curr.pos[j]
-	// })
 	curr.length = len(word)
 }
 
@@ -88,6 +85,9 @@ func Find(word string, node *Trie, edits int, index int, changes int) []result {
 		}
 
 		idx := word[index] - 'a'
+		if word[index] == 95 {
+			idx = 26
+		}
 		for i := 0; i < len(node.children); i++ {
 			if node.children[i] != nil {
 				if node.children[i] != node.children[idx] {
