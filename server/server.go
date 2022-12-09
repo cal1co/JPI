@@ -7,11 +7,12 @@ import (
 	"strings"
 	"time"
 
-	data "github.com/cal1co/jpi/controllers"
+	cache "github.com/cal1co/jpi/cache"
+	controller "github.com/cal1co/jpi/controllers"
 	"github.com/gin-gonic/gin"
 )
 
-func JPI(trieData data.Output) {
+func JPI(trieData controller.Output) {
 	router := gin.Default()
 
 	router.GET("/", func(c *gin.Context) {
@@ -23,7 +24,7 @@ func JPI(trieData data.Output) {
 	router.GET("/get/:word", func(c *gin.Context) {
 		word := strings.ToLower(c.Param("word"))
 		start := time.Now()
-		res := data.Fetch(&trieData.Nodes, trieData.Slice, word)
+		res := cache.LookupAndCache(trieData, word)
 		end := time.Since(start).Seconds()
 
 		msg := strconv.Itoa(len(res)) + " results for " + "'" + word + "'" + " in " + fmt.Sprintf("%f", end) + "s"

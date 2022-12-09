@@ -1,10 +1,10 @@
-package main
+package models
 
-type entries struct {
-	entres []entry
+type Entries struct {
+	entries []Entry
 }
 
-type entry struct {
+type Entry struct {
 	Word      string
 	Alternate string
 	Form      string
