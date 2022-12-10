@@ -9,6 +9,7 @@ import (
 
 	cache "github.com/cal1co/jpi/cache"
 	controller "github.com/cal1co/jpi/controllers"
+	keygen "github.com/cal1co/jpi/keygen"
 	"github.com/gin-gonic/gin"
 )
 
@@ -23,6 +24,7 @@ func JPI(trieData controller.Output) {
 
 	router.GET("/get/:word", func(c *gin.Context) {
 		word := strings.ToLower(c.Param("word"))
+
 		start := time.Now()
 		res := cache.LookupAndCache(trieData, word)
 		end := time.Since(start).Seconds()
@@ -32,6 +34,14 @@ func JPI(trieData controller.Output) {
 		c.JSON(http.StatusOK, gin.H{
 			msg: res,
 		})
+	})
+
+	router.GET("/generate", func(c *gin.Context) {
+		val, err := keygen.GenerateKey()
+		if err != nil {
+			fmt.Println(val)
+		}
+		fmt.Println("generate response", val)
 	})
 	router.Run()
 }

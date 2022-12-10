@@ -80,6 +80,7 @@ func InitStructures() Output {
 	}
 
 	trie := algo.InitTrie()
+
 	var slice Entries
 	for _, dictBank := range dict {
 		jsonFile, err := os.Open(dictBank)
